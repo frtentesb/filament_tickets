@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('priority')->default('low');
             $table->string('category');
             $table->text('description');
-            $table->string('file');
+            $table->string('attachment_path');
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->timestamp('closed_at')->nullable();

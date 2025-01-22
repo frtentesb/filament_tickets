@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Ticket::class)->constrained()->cascadeOnDelete();
             $table->text('comment');
-            $table->string('rating');
+            $table->tinyInteger('rating');
             $table->timestamps();
 
         });
