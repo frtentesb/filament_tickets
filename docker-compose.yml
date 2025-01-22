@@ -1,0 +1,91 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        user: ${USER:-wallace}
+        uid: ${UID:-1000}
+      dockerfile: Dockerfile
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www/
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - queue
+      - mysql
+    networks:
+      - ticket
+
+  queue:
+    build:
+      context: .
+      args:
+        user: ${USER:-wallace}
+        uid: ${UID:-1000}
+      dockerfile: Dockerfile
+    restart: always
+    command: "php artisan queue:work"
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - redis
+    networks:
+      - ticket
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+      - ticket
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      LANG: C.UTF-8
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ticket
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+      - ticket
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: on-failure
+    tty: true
+    ports:
+      - 1025:1025 # SMTP server
+      - 8025:8025 # Web UI
+    networks:
+      - ticket
+
+volumes:
+  mysql-data:
+
+networks:
+  ticket:
+    driver: bridge
