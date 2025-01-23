@@ -24,3 +24,5 @@
 8. Criação de pagina de cadastro Personalizada
 
 9. Testes de Login e cadastramento de usuarios.
+
+10. Teste de commit e push
