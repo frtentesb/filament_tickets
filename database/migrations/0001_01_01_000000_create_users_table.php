@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('telephone');
             $table->string('document_number')->unique();
+            $table->string('avatar_url')->nullable();
             $table->json('settings')->nullable();
             $table->boolean('is_admin')->default(false);
             $table->timestamp('email_verified_at')->nullable();
