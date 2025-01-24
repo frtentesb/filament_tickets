@@ -26,17 +26,31 @@
 
 -   FEITO - Criação da primeira Resource (TIcket)
 
-# Atividades para executar (23/01/25):
+# Atividades Realizadas (23/01/25):
 
-**_ Rodar comando composer update no terminal do container para baixar as atualizações do filament _**
+-   FEITO - Criação das Enums
 
-1. Criação das Enums
+-   FEITO - Estruturar parte das Models
+
+-   FEITO - Criação da resources de Fabricantes, Produtos e Tickes (Painel Adm)
+
+-   FEITO - Criação de RelationManager do TIcke response com a Resource do Admin
+
+-   FEITO - Criação dos Primeiros Relacionamentos
+
+# Atividades Realizadas (24/01/25):
+
+-   FEITO WALLACE - Ajuste no filtro da resource de produto (Veja explicação no comentario do codigo fonte)
+-   FEITO WALLACE - Redirecionamento correto da notificação para abrir ticket no painel adm
+-   FEITO WALLACE - Adição correta de icones (Ontem vc estava digitando errado o nome dos mesmos)
+
+# Atividades para executar (24/01/25):
+
+1. Ajustar os campos das suas resources, organize melhor pensando na USABILIDADE e na Logica de abertura/preenchimento dos itens
 
 2. Estruturar o restante das Models
 
 3. Criação de demais resources
-
-4. Criação de pagina custom liveware para alteração de tema, Dados Basicos (Telefone e Documento)
 
 # Comandos Utilizados
 

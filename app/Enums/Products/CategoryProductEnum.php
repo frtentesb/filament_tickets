@@ -6,9 +6,7 @@ use Filament\Support\Contracts\HasLabel;
 
 enum CategoryProductEnum: string implements HasLabel
 {
-        //
-
-
+    // Wallace (Retidado os espaços em branco para economizar tamanho de arquivo)
     case HARD_DISK = 'hard_disk';
     case MEMORY = 'memory';
     case PROCESSATOR = 'processator';
@@ -16,13 +14,8 @@ enum CategoryProductEnum: string implements HasLabel
     case VIDEO_CARD = 'video_card';
     case HEADPHONES = 'headphones';
 
-
-
-    //
-
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
-
         return match ($this) {
             self::HARD_DISK => 'HD',
             self::MEMORY => 'Memória',

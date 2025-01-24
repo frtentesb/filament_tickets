@@ -17,7 +17,7 @@ class ManufacturerResource extends Resource
 {
     protected static ?string $model = Manufacturer::class;
 
-    protected static ?string $navigationIcon = 'fas-building-columns';
+    protected static ?string $navigationIcon = 'fas-industry';
     protected static ?string $navigationGroup = 'Produtos';
     protected static ?string $navigationLabel = 'Fabricantes';
     protected static ?string $modelLabel = 'Fabricante';

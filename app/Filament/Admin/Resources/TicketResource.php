@@ -23,7 +23,7 @@ class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
 
-    protected static ?string $navigationIcon = 'fas-building-columns';
+    protected static ?string $navigationIcon = 'fas-comment-dots';
     protected static ?string $navigationGroup = 'Atendimentos';
     protected static ?string $navigationLabel = 'Tickets';
     protected static ?string $modelLabel = 'Ticket';
