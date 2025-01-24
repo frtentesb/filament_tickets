@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\Tickets\StatusTicketEnum;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\Tickets\CategoryTicketEnum;
+use App\Enums\Tickets\PriorityTicketEnum;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ticket extends Model
 {
-protected $filalable = [
+protected $fillable = [
     'user_id',
     'status',
     'priority',
@@ -19,11 +24,26 @@ protected $filalable = [
 
 ];
 
-protected $cast = [
-    'start_date' => 'datetime',
-    'end_date' => 'datetime',
-    'closed_at' => 'datetime',
-    'atachment_path' => 'array',
+protected $casts = [
+
+    'attachment_path' => 'array',
+    'status' => StatusTicketEnum::class,
+    'priority' => PriorityTicketEnum::class,
+    'category' => CategoryTicketEnum::class,
+
+
 ];
+
+public function user(): BelongsTo
+{
+    return $this->belongsTo(User::class);
+
+}
+
+public function ticketresponses(): HasMany
+{
+    return $this->hasMany(TicketResponse::class, 'ticket_id');
+}
+
     //
 }
