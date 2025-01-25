@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use App\Enums\Tickets\StatusTicketEnum;
 use Filament\Forms\Components\Fieldset;
 use App\Enums\Tickets\CategoryTicketEnum;
 use App\Enums\Tickets\PriorityTicketEnum;
@@ -34,9 +35,15 @@ class TicketResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
+                ->options(User::all()->pluck('name', 'id'))
                 ->searchable()
                 ->required()
-                ->options(User::all()->pluck('name', 'id')),
+                ->columns(1),
+                Select::make('status')
+                ->searchable()
+                ->required()
+                ->options(StatusTicketEnum::class),
+
                 Fieldset::make('Detalhe do problema')
                 ->schema([
                     Forms\Components\RichEditor::make('description')
