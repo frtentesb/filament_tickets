@@ -40,7 +40,7 @@ class AppPanelProvider extends PanelProvider
             ->userMenuItems([
                 'profile' => MenuItem::make()
                     ->label('Meu Perfil')
-                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->url(fn(): string => EditProfilePage::getUrl())
                     ->icon('heroicon-m-user-circle')
 
             ])
@@ -49,7 +49,7 @@ class AppPanelProvider extends PanelProvider
                     ->label('Admin')
                     ->icon('heroicon-o-cog-6-tooth')
                     ->url('/admin')
-                    ->visible(fn (): bool => Auth::user()->is_admin),
+                    ->visible(fn(): bool => Auth::user()->is_admin),
             ])
             ->colors([
                 'primary' => Color::Amber,
@@ -93,8 +93,7 @@ class AppPanelProvider extends PanelProvider
                         value: true,
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars
                     )
-                    ->customProfileComponents([
-                    ]),
+                    ->customProfileComponents([]),
             ]);
     }
 }

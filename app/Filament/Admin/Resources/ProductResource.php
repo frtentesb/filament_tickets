@@ -32,20 +32,35 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
-                Money::make('price')
-                    ->default('100,00')
-                    ->required(),
-                Forms\Components\Select::make('category')
+
+                Fieldset::make('Produtos')
+                ->schema([
+                    Forms\Components\Select::make('category')
                     ->searchable()
                     ->required()
                     ->validationMessages([
                         'required' => 'O campo categoria é obrigatório.',
                     ])
                     ->options(CategoryProductEnum::class),
-                Fieldset::make('Foto do Produto')
+                    Forms\Components\Select::make('manufacturer')
+                    ->searchable()
+                    ->required()
+                    ->validationMessages([
+                        'required' => 'O campo Fabricante é obrigatório.',
+                    ])
+                    ->options(function () {
+                        return Manufacturer::all()->pluck('name', 'name');
+                    }),
+                ])->columns(2),
+                Money::make('price')
+                ->default('100,00')
+                ->required(),
+                Forms\Components\Textarea::make('description')
+                    ->required()
+                    ->columnSpanFull(),
+
+
+                Fieldset::make('Foto')
                     ->schema([
                         FileUpload::make('image')
                             ->label('Fotos Produto')
@@ -56,15 +71,7 @@ class ProductResource extends Resource
                             ->imageEditor(),
 
                     ])->columns(1),
-                Forms\Components\Select::make('manufacturer')
-                    ->searchable()
-                    ->required()
-                    ->validationMessages([
-                        'required' => 'O campo Fabricante é obrigatório.',
-                    ])
-                    ->options(function () {
-                        return Manufacturer::all()->pluck('name', 'name');
-                    }),
+
 
             ]);
     }
