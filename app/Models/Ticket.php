@@ -13,33 +13,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ticket extends Model
 {
-protected $fillable = [
-    'user_id',
-    'status',
-    'priority',
-    'category',
-    'description',
-    'attachment_path',
-    'start_date',
-    'end_date',
-    'closed_at',
+    protected $fillable = [
+        'user_id',
+        'status',
+        'priority',
+        'category',
+        'description',
+        'attachment_path',
+        'start_date',
+        'end_date',
+        'closed_at',
+    ];
 
-];
+    protected $casts = [
 
-protected $casts = [
+        'attachment_path' => 'array',
+        'status' => StatusTicketEnum::class,
+        'priority' => PriorityTicketEnum::class,
+        'category' => CategoryTicketEnum::class,
+    ];
 
-    'attachment_path' => 'array',
-    'status' => StatusTicketEnum::class,
-    'priority' => PriorityTicketEnum::class,
-    'category' => CategoryTicketEnum::class,
-
-
-];
-
-
-//Função para permitir que o Usuarui logado veja apenas os seus tickets
-//Administrador poderá ver todos os tickes tanto no painel App quanto no painel Admin
-protected static function booted()
+    //Função para permitir que o Usuarui logado veja apenas os seus tickets
+    //Administrador poderá ver todos os tickes tanto no painel App quanto no painel Admin
+    protected static function booted()
     {
         static::addGlobalScope('user_tickets', function (Builder $builder) {
             // Aplica a lógica apenas para usuários não administradores
@@ -55,16 +51,12 @@ protected static function booted()
         });
     }
 
-public function user(): BelongsTo
-{
-    return $this->belongsTo(User::class);
-
-}
-
-public function ticketresponses(): HasMany
-{
-    return $this->hasMany(TicketResponse::class, 'ticket_id');
-}
-
-
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function ticketresponses(): HasMany
+    {
+        return $this->hasMany(TicketResponse::class, 'ticket_id');
+    }
 }

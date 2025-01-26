@@ -44,13 +44,23 @@
 -   FEITO WALLACE - Redirecionamento correto da notificação para abrir ticket no painel adm
 -   FEITO WALLACE - Adição correta de icones (Ontem vc estava digitando errado o nome dos mesmos)
 
-# Atividades para executar (24/01/25):
+# Atividades Realizadas (26/01/25):
 
-1. Ajustar os campos das suas resources, organize melhor pensando na USABILIDADE e na Logica de abertura/preenchimento dos itens
+-   FEITO WALLACE - Ajuste no filtro da resource de tickts (Organização do Layout / Inclusão query de busca pro enum)
+-   FEITO WALLACE - Implantação parcial das models (Inventory / manufacturer/ review)
+-   FEITO WALLACE - Identação das resources e models criadas (Retirada de espaços em branco)
 
-2. Estruturar o restante das Models
+# Atividades para executar (26/01/25):
 
-3. Criação de demais resources
+1. Revisão das dúvidas
+
+2. Implementação resource de estoque e controle de iventario.
+
+3. Implementação da avaliação de ticket.
+
+4. Conceitos de Action Table e "Serviços Internos".
+
+5. Conceitos de disparo de email.
 
 # Comandos Utilizados
 

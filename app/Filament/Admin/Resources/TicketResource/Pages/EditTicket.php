@@ -13,7 +13,6 @@ class EditTicket extends EditRecord
 {
     protected static string $resource = TicketResource::class;
 
-
     protected function getHeaderActions(): array
     {
         return [
@@ -22,8 +21,6 @@ class EditTicket extends EditRecord
         ];
     }
     protected function afterSave(): void
-
-
     {
         $ticket = $this->record->fresh(); // Recarrega o ticket atualizado do banco de dados
         $user = $ticket->user;
@@ -38,17 +35,15 @@ class EditTicket extends EditRecord
 
         if ($user) { // Certifique-se de que o usuário existe
             Notification::make()
-            ->title('Chamado Atualizado@@')
-            ->body("Seu Chamado de N. {$ticket->id} foi atualizado. Confira as atualizações.")
-            ->success()
-            ->actions([
-                Action::make('Visualizar')
-                ->url(route('filament.app.resources.tickets.view', ['record' => $ticket->id]))
-                ->button()
-            ,
-            ])
-            ->sendToDatabase($user);
+                ->title('Chamado Atualizado@@')
+                ->body("Seu Chamado de N. {$ticket->id} foi atualizado. Confira as atualizações.")
+                ->success()
+                ->actions([
+                    Action::make('Visualizar')
+                        ->url(route('filament.app.resources.tickets.view', ['record' => $ticket->id]))
+                        ->button(),
+                ])
+                ->sendToDatabase($user);
         }
-
-}
+    }
 }

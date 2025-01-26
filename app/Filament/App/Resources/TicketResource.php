@@ -30,38 +30,34 @@ class TicketResource extends Resource
         return $form
             ->schema([
 
+                Fieldset::make('Classificação do problema')
+                    ->schema([
+                        Forms\Components\Select::make('priority')
+                            ->searchable()
+                            ->required()
+                            ->options(PriorityTicketEnum::class),
+                        Forms\Components\Select::make('category')
+                            ->searchable()
+                            ->required()
+                            ->options(CategoryTicketEnum::class),
+                    ])->columns(2),
+
                 Fieldset::make('Detalhe do problema')
                     ->schema([
                         Forms\Components\RichEditor::make('description')
                             ->required(),
                     ])->columns(1),
 
-                Fieldset::make('Classificação do problema')
-                    ->schema([
-                        Forms\Components\Select::make('priority')
-                        ->searchable()
-                        ->required()
-                        ->options(PriorityTicketEnum::class),
-                    Forms\Components\Select::make('category')
-                        ->searchable()
-                        ->required()
-                        ->options(CategoryTicketEnum::class),
-
-
-                    ])->columns(2),
-                    Fieldset::make('Anexos do problema')
+                Fieldset::make('Anexos do problema')
                     ->schema([
                         FileUpload::make('attachment_path')
-                        ->label('Anexos')
-                        ->disk('public')
-                        ->directory('tickets')
-                        ->multiple()
-                        ->uploadingMessage('Uploading attachment...')
-                        ->maxParallelUploads(1),
-
+                            ->label('Anexos')
+                            ->disk('public')
+                            ->directory('tickets')
+                            ->multiple()
+                            ->uploadingMessage('Uploading attachment...')
+                            ->maxParallelUploads(1),
                     ])->columns(1),
-
-
 
             ]);
     }
@@ -75,27 +71,26 @@ class TicketResource extends Resource
                     ->alignCenter()
                     ->badge(),
                 Tables\Columns\TextColumn::make('priority')
-                ->badge()
-                ->searchable(),
+                    ->badge()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('category')
-                ->badge()
-                ->searchable(),
-
+                    ->badge()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('start_date')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('closed_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

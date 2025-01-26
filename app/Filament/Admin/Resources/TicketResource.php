@@ -16,6 +16,8 @@ use App\Enums\Tickets\CategoryTicketEnum;
 use App\Enums\Tickets\PriorityTicketEnum;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use App\Enums\Products\CategoryProductEnum;
+use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Admin\Resources\TicketResource\Pages;
 use App\Filament\Admin\Resources\TicketResource\RelationManagers;
@@ -34,48 +36,56 @@ class TicketResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('user_id')
-                ->options(User::all()->pluck('name', 'id'))
-                ->searchable()
-                ->required()
-                ->columns(1),
-                Select::make('status')
-                ->searchable()
-                ->required()
-                ->options(StatusTicketEnum::class),
+                Fieldset::make('Classificação do problema')
+                    ->schema([
+                        Select::make('user_id')
+                            ->options(User::all()->pluck('name', 'id'))
+                            ->searchable()
+                            ->required()
+                            ->columns(1),
+
+                        Select::make('priority')
+                            ->searchable()
+                            ->required()
+                            ->options(PriorityTicketEnum::class),
+
+                        Select::make('category')
+                            ->searchable()
+                            ->required()
+                            ->options(CategoryTicketEnum::class),
+
+                        Select::make('status')
+                            ->searchable()
+                            ->required()
+                            ->options(StatusTicketEnum::class),
+                    ])->columns(4),
 
                 Fieldset::make('Detalhe do problema')
-                ->schema([
-                    Forms\Components\RichEditor::make('description')
-                        ->required(),
-                ])->columns(1),
-                Fieldset::make('Classificação do problema')
-                ->schema([
-                    Forms\Components\Select::make('priority')
-                    ->searchable()
-                    ->required()
-                    ->options(PriorityTicketEnum::class),
-                Forms\Components\Select::make('category')
-                    ->searchable()
-                    ->required()
-                    ->options(CategoryTicketEnum::class),
+                    ->schema([
+                        Forms\Components\RichEditor::make('description')
+                            ->required(),
+                    ])->columns(1),
 
-
-                ])->columns(2),
-                    Fieldset::make('Anexos do problema')
+                Fieldset::make('Anexos do problema')
                     ->schema([
                         FileUpload::make('attachment_path')
-                        ->label('Anexos')
-                        ->disk('public')
-                        ->directory('tickets')
-                        ->multiple()
-                        ->uploadingMessage('Carregando as fotos...')
-                        ->maxParallelUploads(1)
-
+                            ->label('Anexos')
+                            ->disk('public')
+                            ->directory('tickets')
+                            ->multiple()
+                            ->uploadingMessage('Carregando as fotos...')
+                            ->maxParallelUploads(1)
                     ])->columns(1),
-                Forms\Components\DateTimePicker::make('start_date'),
-                Forms\Components\DateTimePicker::make('end_date'),
-                Forms\Components\DateTimePicker::make('closed_at'),
+
+                Fieldset::make('Detalhe do problema')
+                    ->schema([
+                        DateTimePicker::make('start_date')
+                            ->readOnly(),
+                        DateTimePicker::make('end_date')
+                            ->readOnly(),
+                        DateTimePicker::make('closed_at')
+                            ->readOnly(),
+                    ])->columns(3),
             ]);
     }
 
@@ -87,31 +97,64 @@ class TicketResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                ->badge()
-                    ->searchable(),
+                    ->badge()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->where(function ($q) use ($search) {
+                            // Busca as Enuns
+                            foreach (StatusTicketEnum::cases() as $enumCase) {
+                                // Verifica se a label contém o termo de busca
+                                if (str_contains(strtolower($enumCase->getLabel()), strtolower($search))) {
+                                    // Busca o valor da enum
+                                    $q->orWhere('status', $enumCase->value);
+                                }
+                            }
+                        });
+                    }),
                 Tables\Columns\TextColumn::make('priority')
-                ->badge()
-                ->searchable(),
+                    ->badge()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->where(function ($q) use ($search) {
+                            // Busca as Enuns
+                            foreach (PriorityTicketEnum::cases() as $enumCase) {
+                                // Verifica se a label contém o termo de busca
+                                if (str_contains(strtolower($enumCase->getLabel()), strtolower($search))) {
+                                    // Busca o valor da enum
+                                    $q->orWhere('priority', $enumCase->value);
+                                }
+                            }
+                        });
+                    }),
                 Tables\Columns\TextColumn::make('category')
-                ->badge()
-                ->searchable(),
+                    ->badge()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->where(function ($q) use ($search) {
+                            // Busca as Enuns
+                            foreach (CategoryTicketEnum::cases() as $enumCase) {
+                                // Verifica se a label contém o termo de busca
+                                if (str_contains(strtolower($enumCase->getLabel()), strtolower($search))) {
+                                    // Busca o valor da enum
+                                    $q->orWhere('category', $enumCase->value);
+                                }
+                            }
+                        });
+                    }),
                 Tables\Columns\ImageColumn::make('attachment_path')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('start_date')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('closed_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

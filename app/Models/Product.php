@@ -18,17 +18,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-
         'category' => CategoryProductEnum::class,
         'image' => 'array',
-
-
-
     ];
-
-
-
-
-        //
-    }
-
+}
