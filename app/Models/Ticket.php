@@ -10,6 +10,7 @@ use App\Enums\Tickets\PriorityTicketEnum;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Ticket extends Model
 {
@@ -58,5 +59,10 @@ class Ticket extends Model
     public function ticketresponses(): HasMany
     {
         return $this->hasMany(TicketResponse::class, 'ticket_id');
+    }
+
+    public function review(): HasOne
+    {
+        return $this->hasOne(Review::class);
     }
 }

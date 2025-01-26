@@ -7,6 +7,8 @@ namespace App\Models;
 use Illuminate\Support\Facades\Storage;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -61,5 +63,23 @@ class User extends Authenticatable implements HasAvatar
     {
         return $this->avatar_url ? Storage::url($this->avatar_url) : null;
 
+    }
+
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+    public function ticketresponses(): HasMany
+    {
+        return $this->hasMany(TicketResponse::class);
+    }
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function useraddress(): HasOne {
+        return $this->hasOne(UserAddress::class);
     }
 }

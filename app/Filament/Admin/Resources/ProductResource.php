@@ -17,6 +17,7 @@ use App\Enums\Products\CategoryProductEnum;
 use Leandrocfe\FilamentPtbrFormFields\Money;
 use App\Filament\Admin\Resources\ProductResource\Pages;
 use App\Filament\Admin\Resources\ProductResource\RelationManagers;
+use Faker\Provider\ar_EG\Text;
 
 class ProductResource extends Resource
 {
@@ -104,6 +105,17 @@ class ProductResource extends Resource
                     }),
 
                 Tables\Columns\TextColumn::make('manufacturer')
+                    ->searchable(),
+
+                    Tables\Columns\TextColumn::make('total_stock')
+                    ->getStateUsing(fn ( $record) => $record->total_stock)
+                    ->searchable(),
+
+                    Tables\Columns\TextColumn::make('avarage_price')
+                    ->getStateUsing(fn ($record) => 'R$ ' . number_format($record->average_price, 2, ',', '.'))
+
+
+
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
