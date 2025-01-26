@@ -15,11 +15,12 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->string('subject');
             $table->string('status')->default('open');
             $table->string('priority')->default('low');
             $table->string('category');
             $table->text('description');
-            $table->string('attachment_path');
+            $table->string('attachment_path')->nullable();
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->timestamp('closed_at')->nullable();

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Iventory extends Model
+class Inventory extends Model
 {
    protected $fillable = [
         'product_id',

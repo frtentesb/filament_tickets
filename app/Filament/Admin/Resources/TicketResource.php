@@ -38,6 +38,11 @@ class TicketResource extends Resource
             ->schema([
                 Fieldset::make('Classificação do problema')
                     ->schema([
+                        Forms\Components\TextInput::make('subject')
+                            ->label('Assunto')
+                            ->required()
+                            ->maxLength(50),
+
                         Select::make('user_id')
                             ->options(User::all()->pluck('name', 'id'))
                             ->searchable()
@@ -58,7 +63,7 @@ class TicketResource extends Resource
                             ->searchable()
                             ->required()
                             ->options(StatusTicketEnum::class),
-                    ])->columns(4),
+                    ])->columns(5),
 
                 Fieldset::make('Detalhe do problema')
                     ->schema([
@@ -94,8 +99,9 @@ class TicketResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('subject')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->searchable(query: function (Builder $query, string $search): Builder {

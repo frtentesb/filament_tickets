@@ -34,32 +34,38 @@ class ProductResource extends Resource
         return $form
             ->schema([
 
-                Fieldset::make('Produtos')
+                Fieldset::make('Dados do Produto')
                 ->schema([
                     Forms\Components\Select::make('category')
+                    ->preload()
                     ->searchable()
                     ->required()
                     ->validationMessages([
                         'required' => 'O campo categoria é obrigatório.',
                     ])
                     ->options(CategoryProductEnum::class),
+
                     Forms\Components\Select::make('manufacturer')
+                    ->relationship('manufacturer', 'name')
+                    ->preload()
                     ->searchable()
                     ->required()
                     ->validationMessages([
                         'required' => 'O campo Fabricante é obrigatório.',
-                    ])
-                    ->options(function () {
-                        return Manufacturer::all()->pluck('name', 'name');
-                    }),
-                ])->columns(2),
-                Money::make('price')
-                ->default('100,00')
-                ->required(),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
+                    ]),
 
+                    Money::make('price')
+                    ->default('100,00')
+                    ->required(),
+
+                ])->columns(3),
+
+                Fieldset::make('Descrição Opcional')
+                    ->schema([
+                        Forms\Components\Textarea::make('description')
+                        ->required()
+                        ->columnSpanFull(),
+                    ])->columns(1),
 
                 Fieldset::make('Foto')
                     ->schema([
@@ -70,10 +76,7 @@ class ProductResource extends Resource
                             ->uploadingMessage('Carregando fotos...')
                             ->image()
                             ->imageEditor(),
-
                     ])->columns(1),
-
-
             ]);
     }
 
@@ -104,19 +107,17 @@ class ProductResource extends Resource
                         });
                     }),
 
-                Tables\Columns\TextColumn::make('manufacturer')
+                Tables\Columns\TextColumn::make('manufacturer.name')
                     ->searchable(),
 
                     Tables\Columns\TextColumn::make('total_stock')
-                    ->getStateUsing(fn ( $record) => $record->total_stock)
-                    ->searchable(),
+                    ->getStateUsing(fn ( $record) => $record->total_stock),
+
 
                     Tables\Columns\TextColumn::make('avarage_price')
-                    ->getStateUsing(fn ($record) => 'R$ ' . number_format($record->average_price, 2, ',', '.'))
+                    ->getStateUsing(fn ($record) => 'R$ ' . number_format($record->average_price, 2, ',', '.')),
 
 
-
-                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

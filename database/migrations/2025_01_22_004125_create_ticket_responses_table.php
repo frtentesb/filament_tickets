@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Ticket::class)->constrained()->cascadeOnDelete();
             $table->text('description');
-            $table->string('file');
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }

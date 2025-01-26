@@ -2,16 +2,17 @@
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\ManufacturerResource\Pages;
-use App\Filament\Admin\Resources\ManufacturerResource\RelationManagers;
-use App\Models\Manufacturer;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Manufacturer;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Fieldset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Admin\Resources\ManufacturerResource\Pages;
+use App\Filament\Admin\Resources\ManufacturerResource\RelationManagers;
 
 class ManufacturerResource extends Resource
 {

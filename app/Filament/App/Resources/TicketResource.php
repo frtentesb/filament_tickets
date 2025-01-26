@@ -32,19 +32,26 @@ class TicketResource extends Resource
 
                 Fieldset::make('Classificação do problema')
                     ->schema([
+                        Forms\Components\TextInput::make('subject')
+                            ->label('Assunto')
+                            ->required()
+                            ->maxLength(50),
                         Forms\Components\Select::make('priority')
+                            ->label('Prioridade')
                             ->searchable()
                             ->required()
                             ->options(PriorityTicketEnum::class),
                         Forms\Components\Select::make('category')
+                            ->label('Categoria')
                             ->searchable()
                             ->required()
                             ->options(CategoryTicketEnum::class),
-                    ])->columns(2),
+                    ])->columns(3),
 
                 Fieldset::make('Detalhe do problema')
                     ->schema([
                         Forms\Components\RichEditor::make('description')
+                            ->label('Detalhes')
                             ->required(),
                     ])->columns(1),
 
@@ -66,6 +73,8 @@ class TicketResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('subject')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable()
                     ->alignCenter()

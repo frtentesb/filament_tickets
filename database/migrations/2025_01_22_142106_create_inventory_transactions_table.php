@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Product;
+use App\Models\Inventory;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -12,13 +13,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('iventory_transactions', function (Blueprint $table) {
+        Schema::create('inventory_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
-            $table->string('category');
-            $table->string('manufacturer');
-            $table->double('sale_price');
-            $table->date('date_sale');
+            $table->foreignIdFor(Inventory::class)->constrained()->cascadeOnDelete();
+            $table->string('movement_type');
+            $table->decimal('sale_price')->nullable();
+            $table->timestamp('date_sale')->nullable();
+            $table->decimal('purchase_price')->nullable();
+            $table->timestamp('date_purchase')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('iventory_transactions');
+        Schema::dropIfExists('inventory_transactions');
     }
 };
