@@ -84,6 +84,9 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('name')
+                ->alignCenter()
+                ->searchable(),
                 Tables\Columns\ImageColumn::make('image')
                     ->circular()
                     ->alignCenter(),

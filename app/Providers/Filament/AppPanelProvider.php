@@ -35,7 +35,7 @@ class AppPanelProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->databaseNotifications()
-            //->emailVerification(EmailVerificationPrompt::class) Função para validação de email do laravel
+             ->emailVerification(EmailVerificationPrompt::class) //Função para validação de email do laravel
             ->registration(Register::class)
             ->userMenuItems([
                 'profile' => MenuItem::make()

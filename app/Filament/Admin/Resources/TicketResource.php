@@ -21,6 +21,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Admin\Resources\TicketResource\Pages;
 use App\Filament\Admin\Resources\TicketResource\RelationManagers;
+use App\Filament\Admin\Resources\TicketResource\RelationManagers\UseraddressesRelationManager;
 
 class TicketResource extends Resource
 {
@@ -183,6 +184,7 @@ class TicketResource extends Resource
         return [
 
             TicketResource\RelationManagers\TicketresponsesRelationManager::class,
+            UseraddressesRelationManager::class,
             //
         ];
     }

@@ -66,4 +66,8 @@ class Ticket extends Model
     {
         return $this->hasOne(Review::class);
     }
+    public function useraddresses(): HasOne {
+        return $this->hasOne(UserAddress::class,'user_id');
+    }
+
 }

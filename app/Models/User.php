@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
-class User extends Authenticatable implements HasAvatar
+class User extends Authenticatable implements HasAvatar, MustVerifyEmail
 {
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -79,7 +80,7 @@ class User extends Authenticatable implements HasAvatar
         return $this->hasMany(Review::class);
     }
 
-    public function useraddress(): HasOne {
+    public function useraddresses(): HasOne {
         return $this->hasOne(UserAddress::class);
     }
 }

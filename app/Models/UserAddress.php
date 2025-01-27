@@ -15,8 +15,8 @@ class UserAddress extends Model
         'district',
         'city',
         'state',
-        'country',
-        'postal_code',
+        'zip_code',
+
     ];
 public function user(): BelongsTo
 {
