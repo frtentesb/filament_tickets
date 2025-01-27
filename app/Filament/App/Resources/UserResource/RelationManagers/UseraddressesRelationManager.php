@@ -6,6 +6,7 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Http;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Leandrocfe\FilamentPtbrFormFields\Cep;
@@ -24,25 +25,49 @@ class UseraddressesRelationManager extends RelationManager
         return $form
             ->schema([
                 Cep::make('zip_code')
-                ->viaCep(
-                    mode: 'suffix', // Determines whether the action should be appended to (suffix) or prepended to (prefix) the cep field, or not included at all (none).
-                    errorMessage: 'CEP inválido.', // Error message to display if the CEP is invalid.
-                    setFields: [
-                        'street' => 'logradouro',
-                        'number' => 'numero',
-                        'complement' => 'complemento',
-                        'district' => 'bairro',
-                        'city' => 'localidade',
-                        'state' => 'uf'
+                    ->label('CEP')
+                    ->viaCep(
+                        mode: 'suffix', // Determines whether the action should be appended to (suffix) or prepended to (prefix) the cep field, or not included at all (none).
+                        errorMessage: 'CEP inválido.', // Error message to display if the CEP is invalid.
+                        setFields: [
+                            'street' => 'logradouro',
+                            'number' => 'numero',
+                            'complement' => 'complemento',
+                            'district' => 'bairro',
+                            'city' => 'localidade',
+                            'state' => 'uf'
+                        ]
+                    )
+                    ->afterStateUpdated(function ($state, $set, $get) {
+                        // Verifica se o CEP foi preenchido corretamente
+                        $address = "{$get('street')}, {$get('number')}, {$get('city')}, {$get('state')}";
 
-                    ]
-                ),
-            TextInput::make('street'),
-            TextInput::make('number'),
-            TextInput::make('complement'),
-            TextInput::make('district'),
-            TextInput::make('city'),
-            TextInput::make('state'),
+                        // Faz a chamada ao Nominatim
+                        $nominatimResponse = Http::withHeaders([
+                            'User-Agent' => 'MinhaAplicacao/1.0 (seu-email@dominio.com)', // Substitua pelo seu e-mail
+                        ])->get('https://nominatim.openstreetmap.org/search', [
+                            'q' => $address,
+                            'format' => 'json',
+                            'addressdetails' => 1,
+                            'limit' => 1,
+                        ]);
+
+                        if ($nominatimResponse->ok() && isset($nominatimResponse[0])) {
+                            $location = $nominatimResponse[0];
+
+                            // Atualiza latitude e longitude
+                            $set('latitude', $location['lat']);
+                            $set('longitude', $location['lon']);
+                        }
+                    }),
+                TextInput::make('street')->label('Rua'),
+                TextInput::make('number')->label('Número')->required(),
+                TextInput::make('complement')->label('Complemento'),
+                TextInput::make('district')->label('Bairro'),
+                TextInput::make('city')->label('Cidade'),
+                TextInput::make('state')->label('Estado'),
+                TextInput::make('latitude')->label('Latitude')->required()->readOnly(),
+                TextInput::make('longitude')->label('Longitude')->required()->readOnly(),
             ]);
     }
 
@@ -51,25 +76,25 @@ class UseraddressesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('zip_code')
             ->columns([
-                    Tables\Columns\TextColumn::make('zip_code')
+                Tables\Columns\TextColumn::make('zip_code')
                     ->searchable()
                     ->alignCenter(),
-                    Tables\Columns\TextColumn::make('street')
+                Tables\Columns\TextColumn::make('street')
                     ->searchable()
                     ->alignCenter(),
-                    Tables\Columns\TextColumn::make('number')
+                Tables\Columns\TextColumn::make('number')
                     ->searchable()
                     ->alignCenter(),
-                    Tables\Columns\TextColumn::make('complement')
+                Tables\Columns\TextColumn::make('complement')
                     ->searchable()
                     ->alignCenter(),
-                    Tables\Columns\TextColumn::make('district')
+                Tables\Columns\TextColumn::make('district')
                     ->searchable()
                     ->alignCenter(),
-                    Tables\Columns\TextColumn::make('city')
+                Tables\Columns\TextColumn::make('city')
                     ->searchable()
                     ->alignCenter(),
-                    Tables\Columns\TextColumn::make('state')
+                Tables\Columns\TextColumn::make('state')
 
             ])
             ->filters([

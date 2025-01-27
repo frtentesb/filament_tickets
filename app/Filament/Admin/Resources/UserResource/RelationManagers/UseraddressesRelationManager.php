@@ -25,50 +25,51 @@ class UseraddressesRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('zip_code')
-                    ->label('CEP')
-                    ->required()
-                    ->reactive() // Torna o campo dinâmico
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        // Faz a chamada para o ViaCEP ao atualizar o CEP
-                        $viaCepResponse = Http::get("https://viacep.com.br/ws/{$state}/json/");
+                Cep::make('zip_code')
+                ->label('CEP')
+                ->viaCep(
+                    mode: 'suffix', // Determines whether the action should be appended to (suffix) or prepended to (prefix) the cep field, or not included at all (none).
+                    errorMessage: 'CEP inválido.', // Error message to display if the CEP is invalid.
+                    setFields: [
+                        'street' => 'logradouro',
+                        'number' => 'numero',
+                        'complement' => 'complemento',
+                        'district' => 'bairro',
+                        'city' => 'localidade',
+                        'state' => 'uf'
 
-                        if ($viaCepResponse->ok() && !$viaCepResponse->json('erro')) {
-                            $data = $viaCepResponse->json();
+                    ])
+                    ->afterStateUpdated(function ($state, $set, $get) {
+                        // Verifica se o CEP foi preenchido corretamente
+                        $address = "{$get('street')}, {$get('number')}, {$get('city')}, {$get('state')}";
 
-                            // Define os valores automaticamente nos campos
-                            $set('street', $data['logradouro'] ?? '');
-                            $set('district', $data['bairro'] ?? '');
-                            $set('city', $data['localidade'] ?? '');
-                            $set('state', $data['uf'] ?? '');
+                        // Faz a chamada ao Nominatim
+                        $nominatimResponse = Http::withHeaders([
+                            'User-Agent' => 'MinhaAplicacao/1.0 (seu-email@dominio.com)', // Substitua pelo seu e-mail
+                        ])->get('https://nominatim.openstreetmap.org/search', [
+                            'q' => $address,
+                            'format' => 'json',
+                            'addressdetails' => 1,
+                            'limit' => 1,
+                        ]);
 
-                            // Faz uma segunda chamada para obter latitude e longitude com base no endereço completo
-                            $address = "{$data['logradouro']}, {$data['localidade']}, {$data['uf']}";
-                            $nominatimResponse = Http::withHeaders([
-                                'User-Agent' => 'MinhaAplicacao/1.0 (wallacemartinss@gmail.com)',
-                            ])->get('https://nominatim.openstreetmap.org/search', [
-                                'q' => $address,
-                                'format' => 'json',
-                                'addressdetails' => 1,
-                                'limit' => 1,
-                            ]);
+                        if ($nominatimResponse->ok() && isset($nominatimResponse[0])) {
+                            $location = $nominatimResponse[0];
 
-                            if ($nominatimResponse->ok() && isset($nominatimResponse[0])) {
-                                $location = $nominatimResponse[0];
-
-                                $set('latitude', $location['lat']);
-                                $set('longitude', $location['lon']);
-                            }
+                            // Atualiza latitude e longitude
+                            $set('latitude', $location['lat']);
+                            $set('longitude', $location['lon']);
                         }
                     }),
+
                 TextInput::make('street')->label('Rua'),
-                TextInput::make('number')->label('Número'),
+                TextInput::make('number')->label('Número')->required(),
                 TextInput::make('complement')->label('Complemento'),
                 TextInput::make('district')->label('Bairro'),
                 TextInput::make('city')->label('Cidade'),
                 TextInput::make('state')->label('Estado'),
-                TextInput::make('latitude')->label('Latitude')->disabled(),
-                TextInput::make('longitude')->label('Longitude')->disabled(),
+                TextInput::make('latitude')->label('Latitude')->required()->readOnly(),
+                TextInput::make('longitude')->label('Longitude')->required()->readOnly(),
             ]);
     }
 
