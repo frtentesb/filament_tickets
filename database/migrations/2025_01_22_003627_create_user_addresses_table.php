@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('state');
             $table->string('complement')->nullable();
             $table->string('reference')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->timestamps();
         });
     }

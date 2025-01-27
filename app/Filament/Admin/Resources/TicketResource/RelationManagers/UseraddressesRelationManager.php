@@ -6,6 +6,8 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Http;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Leandrocfe\FilamentPtbrFormFields\Cep;
@@ -77,8 +79,11 @@ class UseraddressesRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Action::make('exibirmapa')
+                    ->label('Exibir Mapa')
+                    ->icon('fas-map-pin')
+                    ->modalHeading('Visualizar Localização')
+                    ->modalWidth('xl')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
