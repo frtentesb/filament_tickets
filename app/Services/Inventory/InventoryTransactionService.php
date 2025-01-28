@@ -2,10 +2,7 @@
 
 namespace App\Services\Inventory;
 
-
-use App\Models\Product;
-use App\Models\InventoryTransaction;
-use App\Enums\Products\MovimentProductEnum;
+use App\Models\{InventoryTransaction};
 
 class InventoryTransactionService
 {
@@ -13,11 +10,11 @@ class InventoryTransactionService
     {
         if ($product && $inventoryId) {
             InventoryTransaction::create([
-                'product_id' => $product->id,
-                'inventory_id' => $inventoryId,
-                'movement_type' => $movementType,
+                'product_id'     => $product->id,
+                'inventory_id'   => $inventoryId,
+                'movement_type'  => $movementType,
                 'purchase_price' => $price,
-                'date_purchase' => $date,
+                'date_purchase'  => $date,
             ]);
         }
     }

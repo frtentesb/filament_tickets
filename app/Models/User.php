@@ -2,22 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Filament\Models\Contracts\HasAvatar;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{HasMany, HasOne};
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\{Storage};
 
 class User extends Authenticatable implements HasAvatar, MustVerifyEmail
 {
-
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -54,9 +51,9 @@ class User extends Authenticatable implements HasAvatar, MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_admin' => 'boolean',
-            'settings' => 'json',
+            'password'          => 'hashed',
+            'is_admin'          => 'boolean',
+            'settings'          => 'json',
 
         ];
     }
@@ -65,7 +62,6 @@ class User extends Authenticatable implements HasAvatar, MustVerifyEmail
         return $this->avatar_url ? Storage::url($this->avatar_url) : null;
 
     }
-
 
     public function tickets(): HasMany
     {
@@ -80,7 +76,8 @@ class User extends Authenticatable implements HasAvatar, MustVerifyEmail
         return $this->hasMany(Review::class);
     }
 
-    public function useraddresses(): HasOne {
+    public function useraddresses(): HasOne
+    {
         return $this->hasOne(UserAddress::class);
     }
 }

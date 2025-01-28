@@ -2,27 +2,27 @@
 
 namespace App\Filament\Admin\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
+use App\Filament\Admin\Resources\ManufacturerResource\{Pages};
 use App\Models\Manufacturer;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Fieldset;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Admin\Resources\ManufacturerResource\Pages;
-use App\Filament\Admin\Resources\ManufacturerResource\RelationManagers;
+use Filament\Tables\Table;
+use Filament\{Forms, Tables};
 
 class ManufacturerResource extends Resource
 {
     protected static ?string $model = Manufacturer::class;
 
     protected static ?string $navigationIcon = 'fas-industry';
+
     protected static ?string $navigationGroup = 'Produtos';
+
     protected static ?string $navigationLabel = 'Fabricantes';
+
     protected static ?string $modelLabel = 'Fabricante';
+
     protected static ?string $modelLabelPlural = "Fabricantes";
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form

@@ -2,15 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Auth;
-use App\Enums\Tickets\StatusTicketEnum;
-use Illuminate\Database\Eloquent\Model;
-use App\Enums\Tickets\CategoryTicketEnum;
-use App\Enums\Tickets\PriorityTicketEnum;
+use App\Enums\Tickets\{CategoryTicketEnum, PriorityTicketEnum, StatusTicketEnum};
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany, HasOne};
+use Illuminate\Support\Facades\Auth;
 
 class Ticket extends Model
 {
@@ -30,9 +26,9 @@ class Ticket extends Model
     protected $casts = [
 
         'attachment_path' => 'array',
-        'status' => StatusTicketEnum::class,
-        'priority' => PriorityTicketEnum::class,
-        'category' => CategoryTicketEnum::class,
+        'status'          => StatusTicketEnum::class,
+        'priority'        => PriorityTicketEnum::class,
+        'category'        => CategoryTicketEnum::class,
     ];
 
     //Função para permitir que o Usuarui logado veja apenas os seus tickets
@@ -66,8 +62,13 @@ class Ticket extends Model
     {
         return $this->hasOne(Review::class);
     }
-    public function useraddresses(): HasOne {
-        return $this->hasOne(UserAddress::class,'user_id');
+    public function useraddresses(): HasOne
+    {
+        return $this->hasOne(UserAddress::class, 'user_id');
     }
+public function appoitments(): HasOne
+{
+    return $this->hasOne(Appointment::class);
 
+}
 }

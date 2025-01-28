@@ -2,23 +2,15 @@
 
 namespace App\Filament\App\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Ticket;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Field;
-use App\Enums\Tickets\StatusTicketEnum;
-use Filament\Forms\Components\Fieldset;
-use App\Enums\Tickets\CategoryTicketEnum;
-use App\Enums\Tickets\PriorityTicketEnum;
-use Filament\Forms\Components\FileUpload;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\App\Resources\TicketResource\Pages;
-use App\Filament\App\Resources\TicketResource\RelationManagers;
+use App\Enums\Tickets\{CategoryTicketEnum, PriorityTicketEnum};
 use App\Filament\App\Resources\TicketResource\RelationManagers\TicketresponsesRelationManager;
+use App\Filament\App\Resources\TicketResource\{Pages};
+use App\Models\Ticket;
+use Filament\Forms\Components\{Fieldset, FileUpload};
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Table;
+use Filament\{Forms, Tables};
 
 class TicketResource extends Resource
 {
@@ -124,8 +116,6 @@ class TicketResource extends Resource
 
             TicketresponsesRelationManager::class,
 
-
-
             //
         ];
     }
@@ -133,10 +123,10 @@ class TicketResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTickets::route('/'),
+            'index'  => Pages\ListTickets::route('/'),
             'create' => Pages\CreateTicket::route('/create'),
-            'view' => Pages\ViewTicket::route('/{record}'),
-            'edit' => Pages\EditTicket::route('/{record}/edit'),
+            'view'   => Pages\ViewTicket::route('/{record}'),
+            'edit'   => Pages\EditTicket::route('/{record}/edit'),
         ];
     }
 }

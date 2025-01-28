@@ -2,12 +2,11 @@
 
 namespace App\Filament\Admin\Resources\TicketResource\Pages;
 
+use App\Filament\Admin\Resources\TicketResource;
 use Filament\Actions;
-use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Notifications\Actions\Action;
-use App\Filament\Admin\Resources\TicketResource;
 
 class EditTicket extends EditRecord
 {
@@ -23,7 +22,7 @@ class EditTicket extends EditRecord
     protected function afterSave(): void
     {
         $ticket = $this->record->fresh(); // Recarrega o ticket atualizado do banco de dados
-        $user = $ticket->user;
+        $user   = $ticket->user;
         $status = strtolower(trim($ticket->status->value)); // Normaliza o valor do enum
 
         if (in_array($status, ['resolved', 'closed'])) {

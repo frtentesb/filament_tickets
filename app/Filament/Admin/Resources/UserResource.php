@@ -2,28 +2,18 @@
 
 namespace App\Filament\Admin\Resources;
 
-use Filament\Forms;
-use App\Models\User;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use App\Mail\PasswordResetMail;
-use Filament\Tables\Actions\EditAction;
-use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Filament\Tables\Actions\ViewAction;
-use Filament\Notifications\Notification;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Admin\Resources\UserResource\Pages;
-use App\Filament\Admin\Resources\UserResource\RelationManagers;
 use App\Filament\Admin\Resources\UserResource\RelationManagers\UseraddressesRelationManager;
-
+use App\Filament\Admin\Resources\UserResource\{Pages};
+use App\Mail\PasswordResetMail;
+use App\Models\User;
+use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\{Action, ActionGroup, DeleteAction, EditAction, ViewAction};
+use Filament\Tables\Table;
+use Filament\{Forms, Tables};
+use Illuminate\Support\Facades\{Hash, Mail};
+use Illuminate\Support\Str;
 
 class UserResource extends Resource
 {
@@ -95,7 +85,7 @@ class UserResource extends Resource
             ])
             ->actions([
 
-                    ActionGroup::make([
+                ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),
@@ -119,7 +109,6 @@ class UserResource extends Resource
                         ->icon('heroicon-o-key'), // Ícone da chave
                 ]),
 
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -139,10 +128,10 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
+            'index'  => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'view'   => Pages\ViewUser::route('/{record}'),
+            'edit'   => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }

@@ -7,9 +7,6 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListProducts extends ListRecords
-
-
-
 {
     protected static string $resource = ProductResource::class;
 
@@ -19,7 +16,5 @@ class ListProducts extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
-
-
 
 }

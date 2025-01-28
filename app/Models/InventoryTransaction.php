@@ -19,8 +19,8 @@ class InventoryTransaction extends Model
     ];
 
     protected $casts = [
-        'sale_price' => 'integer',
-        'date_sale' => 'datetime',
+        'sale_price'    => 'integer',
+        'date_sale'     => 'datetime',
         'date_purchase' => 'datetime',
     ];
 

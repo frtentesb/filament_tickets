@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Products\{CategoryProductEnum};
 use Illuminate\Database\Eloquent\Model;
-use App\Enums\Products\CategoryProductEnum;
-use App\Enums\Products\ManufacturerProductEnum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
@@ -21,7 +20,7 @@ class Product extends Model
 
     protected $casts = [
         'category' => CategoryProductEnum::class,
-        'image' => 'array',
+        'image'    => 'array',
     ];
 
     public function manufacturer()
@@ -34,7 +33,6 @@ class Product extends Model
     }
 
     public function getTotalstockAttribute(): int
-
     {
         return $this->inventories->sum('quantity');
     }
@@ -50,7 +48,7 @@ class Product extends Model
         }
 
         // Calcula a soma ponderada (preço unitário * quantidade)
-        $weightedSum = $inventories->sum(fn($inventory) => $inventory->unit_price * $inventory->quantity);
+        $weightedSum = $inventories->sum(fn ($inventory) => $inventory->unit_price * $inventory->quantity);
 
         // Soma das quantidades
         $totalQuantity = $inventories->sum('quantity');

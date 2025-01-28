@@ -2,15 +2,12 @@
 
 namespace App\Filament\Admin\Resources\TicketResource\Pages;
 
-use Filament\Actions;
-use Illuminate\Support\Facades\Auth;
-use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Admin\Resources\TicketResource;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateTicket extends CreateRecord
 {
     protected static string $resource = TicketResource::class;
-
 
     protected function getRedirectUrl(): string
     {

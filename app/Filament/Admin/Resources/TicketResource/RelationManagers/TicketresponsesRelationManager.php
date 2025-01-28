@@ -2,15 +2,11 @@
 
 namespace App\Filament\Admin\Resources\TicketResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Forms\FormsComponent;
 use Filament\Forms\Components\FileUpload;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\{Form};
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Table;
+use Filament\{Forms, Tables};
 
 class TicketresponsesRelationManager extends RelationManager
 {
@@ -23,8 +19,8 @@ class TicketresponsesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),
-                    FileUpload::make('file')
-                    ->label('Anexos'),
+                FileUpload::make('file')
+                ->label('Anexos'),
             ]);
     }
 

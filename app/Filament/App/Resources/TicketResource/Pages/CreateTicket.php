@@ -2,14 +2,12 @@
 
 namespace App\Filament\App\Resources\TicketResource\Pages;
 
-use Filament\Actions;
+use App\Filament\App\Resources\TicketResource;
+use App\Models\User;
 use Filament\Notifications\Actions\Action;
-use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
-use App\Filament\App\Resources\TicketResource;
-use App\Filament\Admin\Resources\TicketResource as TicketResourceAdmin;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class CreateTicket extends CreateRecord
 {
@@ -37,7 +35,6 @@ class CreateTicket extends CreateRecord
             ])
             ->sendToDatabase(Auth::user()); // Envia para o usuário relacionado ao ticket
 
-
         // Wallace (Busca no banco de dados o Usuario administrador)
         $useradmin = User::where('is_admin', true)->first();
 
@@ -49,7 +46,7 @@ class CreateTicket extends CreateRecord
             ->actions([
                 Action::make('Visualizar')
                     // Usei o comando php artisan route:list para ver o namespace da rota do Filament.
-                    ->url(route('filament.admin.resources.tickets.view', ['record' => $ticket->id]))
+                    ->url(route('filament.admin.resources.tickets.view', ['record' => $ticket->id])),
             ])
             ->sendToDatabase($useradmin);
     }

@@ -6,12 +6,12 @@ use Filament\Support\Contracts\HasLabel;
 
 enum MovimentProductEnum: string implements HasLabel
 {
-    case IN = 'in';
+    case IN  = 'in';
     case OUT = 'out';
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::IN => 'Entrada',
+            self::IN  => 'Entrada',
             self::OUT => 'Saída',
 
         };

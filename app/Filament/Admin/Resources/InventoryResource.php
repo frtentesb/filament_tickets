@@ -2,34 +2,29 @@
 
 namespace App\Filament\Admin\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
+use App\Filament\Admin\Resources\InventoryResource\{Pages};
+use App\Models\{Inventory};
+use Filament\Forms\Components\{DatePicker, Fieldset, Select, TextInput, Textarea};
 use Filament\Forms\Form;
-use App\Models\Inventory;
-use Filament\Tables\Table;
-use App\Models\Manufacturer;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Table;
+use Filament\{Tables};
 use Leandrocfe\FilamentPtbrFormFields\Money;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Admin\Resources\InventoryResource\Pages;
-use App\Filament\Admin\Resources\InventoryResource\RelationManagers;
 
 class InventoryResource extends Resource
 {
     protected static ?string $model = Inventory::class;
 
     protected static ?string $navigationIcon = 'fas-truck-moving';
+
     protected static ?string $navigationGroup = 'Produtos';
+
     protected static ?string $navigationLabel = 'Estoque';
+
     protected static ?string $modelLabel = 'Estoque';
+
     protected static ?string $modelLabelPlural = "Estoque";
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
@@ -142,10 +137,10 @@ class InventoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInventory::route('/'),
+            'index'  => Pages\ListInventory::route('/'),
             'create' => Pages\CreateInventory::route('/create'),
-            'view' => Pages\ViewInventory::route('/{record}'),
-            'edit' => Pages\EditInventory::route('/{record}/edit'),
+            'view'   => Pages\ViewInventory::route('/{record}'),
+            'edit'   => Pages\EditInventory::route('/{record}/edit'),
         ];
     }
 }

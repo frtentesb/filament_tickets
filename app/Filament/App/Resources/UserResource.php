@@ -2,19 +2,15 @@
 
 namespace App\Filament\App\Resources;
 
-use Filament\Forms;
-use App\Models\User;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder;
-use App\Filament\App\Resources\UserResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\App\Resources\UserResource\RelationManagers;
 use App\Filament\App\Resources\UserResource\RelationManagers\UseraddressesRelationManager;
-use Illuminate\Database\Eloquent\Model;
+use App\Filament\App\Resources\UserResource\{Pages};
+use App\Models\User;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Table;
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -23,11 +19,11 @@ class UserResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     public static function getEloquentQuery(): Builder
     {
-            if(Auth::user()->is_admin === 1){
-                return parent::getEloquentQuery();
-            }else{
-                return parent::getEloquentQuery()->where('id', Auth::user()->id);
-            }
+        if (Auth::user()->is_admin === 1) {
+            return parent::getEloquentQuery();
+        } else {
+            return parent::getEloquentQuery()->where('id', Auth::user()->id);
+        }
 
         return parent::getEloquentQuery()->where('id', Auth::user()->id);
     }
@@ -90,7 +86,7 @@ class UserResource extends Resource
             ])
             ->bulkActions([
 
-                            ]);
+            ]);
     }
 
     public static function getRelations(): array
@@ -106,10 +102,10 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
+            'index'  => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'view'   => Pages\ViewUser::route('/{record}'),
+            'edit'   => Pages\EditUser::route('/{record}/edit'),
         ];
     }
     public static function canCreate(): bool

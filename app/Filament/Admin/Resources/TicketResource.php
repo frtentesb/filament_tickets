@@ -2,36 +2,37 @@
 
 namespace App\Filament\Admin\Resources;
 
-use Filament\Forms;
-use App\Models\User;
-use Filament\Tables;
-use App\Models\Ticket;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Appointment;
+use Filament\{Forms, Tables};
+
+use App\Models\{Ticket, User};
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use App\Enums\Tickets\StatusTicketEnum;
-use Filament\Forms\Components\Fieldset;
-use App\Enums\Tickets\CategoryTicketEnum;
-use App\Enums\Tickets\PriorityTicketEnum;
-use Filament\Forms\Components\FileUpload;
-use Illuminate\Database\Eloquent\Builder;
-use App\Enums\Products\CategoryProductEnum;
-use Filament\Forms\Components\DateTimePicker;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Admin\Resources\TicketResource\Pages;
-use App\Filament\Admin\Resources\TicketResource\RelationManagers;
+use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\{Builder};
+use App\Filament\Admin\Resources\TicketResource\{Pages};
+use Filament\Notifications\Actions\Action as NotificationAction;
+use Filament\Forms\Components\{DateTimePicker, Fieldset, FileUpload, Select, TextInput};
+use Filament\Tables\Actions\{Action, ActionGroup, DeleteAction, EditAction, ViewAction};
 use App\Filament\Admin\Resources\TicketResource\RelationManagers\UseraddressesRelationManager;
+use App\Enums\Tickets\{AppoitmentTicketEnum, CategoryTicketEnum, PriorityTicketEnum, StatusTicketEnum};
 
 class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
 
     protected static ?string $navigationIcon = 'fas-comment-dots';
+
     protected static ?string $navigationGroup = 'Atendimentos';
+
     protected static ?string $navigationLabel = 'Tickets';
+
     protected static ?string $modelLabel = 'Ticket';
+
     protected static ?string $modelLabelPlural = "Tickets";
+
     protected static ?int $navigationSort = 1;
     public static function form(Form $form): Form
     {
@@ -80,7 +81,7 @@ class TicketResource extends Resource
                             ->directory('tickets')
                             ->multiple()
                             ->uploadingMessage('Carregando as fotos...')
-                            ->maxParallelUploads(1)
+                            ->maxParallelUploads(1),
                     ])->columns(1),
 
                 Fieldset::make('Detalhe do problema')
@@ -169,8 +170,68 @@ class TicketResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    Action::make('exibirmapa')
+                    ->label('Exibir Mapa')
+                    ->icon('fas-map-pin')
+                    ->url(function ($record) {
+                        // Obter o endereço do usuário associado ao registro
+                        $userAddress = $record->useraddresses;
+
+                        // Verificar se o endereço existe
+                        if ($userAddress) {
+                            $street = urlencode($userAddress->street);
+                            $number = urlencode($userAddress->number);
+                            $city   = urlencode($userAddress->city);
+                            $state  = urlencode($userAddress->state);
+
+                            // Montar a URL do Google Maps
+                            return 'https://www.google.com/maps/search/?api=1&query=' . $street . '+' . $number . ',' . $city . '-' . $state;
+                        }
+
+                    })
+                    ->openUrlInNewTab(),
+
+                    Action::make('criaragendamento')
+                    ->label('Criar Agendamento')
+                    ->icon('fas-map-pin')
+                    ->requiresConfirmation()
+                    ->form([
+                        Select::make('type_service')
+                            ->options(
+                            AppoitmentTicketEnum::class
+                            ),
+                        DateTimePicker::make('date'),
+                    ])
+                    ->slideOver()
+                    ->action(function (Ticket $record, array $data) {
+                        $users= $record->user_id;
+                       Appointment::create([
+                            'ticket_id' => $record->id,
+                            'type_service' => $data['type_service'],
+                            'date' => $data['date'],
+                        ]);
+
+                   Notification::make()
+                  ->title('Chamado agendado com sucesso')
+                  ->body("Seu Chamado de N. {$record->id} Agendado para " . \Carbon\Carbon::parse($data['date'])->format('d/m/Y H:i:s') . " de forma " . AppoitmentTicketEnum::from($data['type_service'])->getLabel())
+
+                  ->success()
+                  ->actions([
+                    NotificationAction::make('Visualizar')
+                   ->url(route('filament.app.resources.tickets.view', ['record' => $record->id])),
+
+            ])
+
+                  ->sendToDatabase(User::find($users));
+
+                    }),
+
+                ]),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -192,10 +253,10 @@ class TicketResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTickets::route('/'),
+            'index'  => Pages\ListTickets::route('/'),
             'create' => Pages\CreateTicket::route('/create'),
-            'view' => Pages\ViewTicket::route('/{record}'),
-            'edit' => Pages\EditTicket::route('/{record}/edit'),
+            'view'   => Pages\ViewTicket::route('/{record}'),
+            'edit'   => Pages\EditTicket::route('/{record}/edit'),
         ];
     }
 }

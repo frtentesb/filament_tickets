@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Inventory extends Model
 {
-   protected $fillable = [
+    protected $fillable = [
         'product_id',
         'name',
         'type',
@@ -22,6 +22,4 @@ class Inventory extends Model
         return $this->belongsTo(Product::class);
     }
 
-
 }
-

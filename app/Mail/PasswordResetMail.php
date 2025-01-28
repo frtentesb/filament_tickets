@@ -3,32 +3,29 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class PasswordResetMail extends Mailable
 {
-    use Queueable, SerializesModels;
-
+    use Queueable;
+    use SerializesModels;
 
     public string $password;
+
     public string $name;
     /**
      * Create a new message instance.
      */
-    public function __construct( string $password, string $name )
+    public function __construct(string $password, string $name)
     {
         $this->password = $password;
-        $this->name = $name;
+        $this->name     = $name;
 
         //
     }
 
     public function build()
-
     {
 
         //dd($this->name, $this->password);
@@ -36,7 +33,7 @@ class PasswordResetMail extends Mailable
             ->view('emails.password_reset')
             ->with([
                 'password' => $this->password,
-                'name' => $this->name
+                'name'     => $this->name,
 
             ]);
     }

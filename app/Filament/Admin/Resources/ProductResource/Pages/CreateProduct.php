@@ -2,10 +2,9 @@
 
 namespace App\Filament\Admin\Resources\ProductResource\Pages;
 
-use Filament\Actions;
-use Illuminate\Support\Facades\Auth;
-use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Admin\Resources\ProductResource;
+use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateProduct extends CreateRecord
 {
@@ -14,9 +13,6 @@ class CreateProduct extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['user_id'] = Auth::user()->id;
-
-
-
 
         return $data;
     }

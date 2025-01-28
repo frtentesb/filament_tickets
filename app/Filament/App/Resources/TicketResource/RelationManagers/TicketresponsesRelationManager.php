@@ -2,19 +2,19 @@
 
 namespace App\Filament\App\Resources\TicketResource\RelationManagers;
 
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\{Forms, Tables};
 
 class TicketresponsesRelationManager extends RelationManager
 {
     protected static string $relationship = 'ticketresponses';
+
     protected static ?string $modelLabel = 'Tratativa';
+
     protected static ?string $modelLabelPlural = "Tratativas";
+
     protected static ?string $title = 'Tratativa do Ticket';
     public function form(Form $form): Form
     {
@@ -33,7 +33,6 @@ class TicketresponsesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('description'),
                 Tables\Columns\TextColumn::make('created_at')
                 ->dateTime('d/m/Y H:i'),
-
 
             ])
 

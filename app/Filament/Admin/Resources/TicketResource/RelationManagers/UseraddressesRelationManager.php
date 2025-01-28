@@ -2,17 +2,13 @@
 
 namespace App\Filament\Admin\Resources\TicketResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Tables\Actions\Action;
-use Illuminate\Support\Facades\Http;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Leandrocfe\FilamentPtbrFormFields\Cep;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Table;
+use Filament\{Tables};
+use Leandrocfe\FilamentPtbrFormFields\Cep;
 
 class UseraddressesRelationManager extends RelationManager
 {
@@ -28,12 +24,12 @@ class UseraddressesRelationManager extends RelationManager
                         mode: 'suffix', // Determines whether the action should be appended to (suffix) or prepended to (prefix) the cep field, or not included at all (none).
                         errorMessage: 'CEP inválido.', // Error message to display if the CEP is invalid.
                         setFields: [
-                            'street' => 'logradouro',
-                            'number' => 'numero',
+                            'street'     => 'logradouro',
+                            'number'     => 'numero',
                             'complement' => 'complemento',
-                            'district' => 'bairro',
-                            'city' => 'localidade',
-                            'state' => 'uf'
+                            'district'   => 'bairro',
+                            'city'       => 'localidade',
+                            'state'      => 'uf',
 
                         ]
                     ),
@@ -69,7 +65,7 @@ class UseraddressesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('city')
                     ->searchable()
                     ->alignCenter(),
-                Tables\Columns\TextColumn::make('state')
+                Tables\Columns\TextColumn::make('state'),
 
             ])
             ->filters([
@@ -82,8 +78,9 @@ class UseraddressesRelationManager extends RelationManager
                 Action::make('exibirmapa')
                     ->label('Exibir Mapa')
                     ->icon('fas-map-pin')
-                    ->modalHeading('Visualizar Localização')
-                    ->modalWidth('xl')
+                    ->url(fn ($record): string => 'https://www.google.com/maps/search/?api=1&query=' . $record->street . '+' . $record->number . ',' . $record->city . '-' . $record->state)
+                    ->openUrlInNewTab(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
