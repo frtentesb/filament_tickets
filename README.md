@@ -49,18 +49,19 @@
 -   FEITO WALLACE - Ajuste no filtro da resource de tickts (Organização do Layout / Inclusão query de busca pro enum)
 -   FEITO WALLACE - Implantação parcial das models (Inventory / manufacturer/ review)
 -   FEITO WALLACE - Identação das resources e models criadas (Retirada de espaços em branco)
+-   FEITO WALLACE - Revisão das dúvidas
+-   FEITO WALLACE - Implementação resource de estoque e controle de iventario.
+-   FEITO WALLACE - Conceitos de Action Table e "Serviços Internos".
+-   FEITO WALLACE - Conceitos de disparo de email.
 
-# Atividades para executar (26/01/25):
+# Atividades Realizadas (28/01/25):
 
-1. Revisão das dúvidas
+-   Correção de Bug na model de Tickets (Relacionamento com a UserAddresses estava incorreto) **_Veja comentado na Model Ticket_**
 
-2. Implementação resource de estoque e controle de iventario.
-
-3. Implementação da avaliação de ticket.
-
-4. Conceitos de Action Table e "Serviços Internos".
-
-5. Conceitos de disparo de email.
+-   Fabio: Estudar conceitos aplicados ate o momento para fixar aprendizagem
+-   Fabio: implementar na coluna do ticker a data de agendamento
+-   Fabio: Implementar disparo de email para cliente quando ticker for agendado
+-   Fabio: Implementar Rotina para atualizar Start date quando agendamento for criado
 
 # Comandos Utilizados
 
@@ -79,3 +80,7 @@
 7. Rodar Seed: php arisan db:seed (caso tabelas ja existam) | php artisan migration --seed (Caso no momento da criação)
 
 8. Linkar repositorio de arquivos: php artisan storage:link (So precisa fazer 1 vez)
+
+9. Rodar Queue - php artisan queue:word
+
+10. Ver rotas do sistema: - php artinsa route:list

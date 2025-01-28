@@ -2,22 +2,21 @@
 
 namespace App\Filament\Admin\Resources;
 
-use Filament\Forms\Form;
-use Filament\Tables\Table;
+use App\Enums\Tickets\{AppoitmentTicketEnum, CategoryTicketEnum, PriorityTicketEnum, StatusTicketEnum};
+use App\Filament\Admin\Resources\TicketResource\RelationManagers\UseraddressesRelationManager;
+use App\Filament\Admin\Resources\TicketResource\{Pages};
 use App\Models\Appointment;
-use Filament\{Forms, Tables};
 
 use App\Models\{Ticket, User};
-use Filament\Resources\Resource;
-use Illuminate\Support\Facades\Auth;
-use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\{Builder};
-use App\Filament\Admin\Resources\TicketResource\{Pages};
+use Filament\Forms\Components\{DateTimePicker, Fieldset, FileUpload, Select};
+use Filament\Forms\Form;
 use Filament\Notifications\Actions\Action as NotificationAction;
-use Filament\Forms\Components\{DateTimePicker, Fieldset, FileUpload, Select, TextInput};
+use Filament\Notifications\Notification;
+use Filament\Resources\Resource;
 use Filament\Tables\Actions\{Action, ActionGroup, DeleteAction, EditAction, ViewAction};
-use App\Filament\Admin\Resources\TicketResource\RelationManagers\UseraddressesRelationManager;
-use App\Enums\Tickets\{AppoitmentTicketEnum, CategoryTicketEnum, PriorityTicketEnum, StatusTicketEnum};
+use Filament\Tables\Table;
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder};
 
 class TicketResource extends Resource
 {
@@ -171,18 +170,24 @@ class TicketResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make(),
+                    ViewAction::make()
+                    ->color('secondary'),
+                    EditAction::make()
+                    ->color('primary'),
                     DeleteAction::make(),
+
                     Action::make('exibirmapa')
                     ->label('Exibir Mapa')
-                    ->icon('fas-map-pin')
+                    //->icon('fas-map-pin')
+                    ->icon('fas-map-location-dot')
+                    ->color('warning')
                     ->url(function ($record) {
                         // Obter o endereço do usuário associado ao registro
-                        $userAddress = $record->useraddresses;
+                        $userAddress = $record->userAddresses->first();
 
                         // Verificar se o endereço existe
                         if ($userAddress) {
+
                             $street = urlencode($userAddress->street);
                             $number = urlencode($userAddress->number);
                             $city   = urlencode($userAddress->city);
@@ -197,40 +202,43 @@ class TicketResource extends Resource
 
                     Action::make('criaragendamento')
                     ->label('Criar Agendamento')
-                    ->icon('fas-map-pin')
+                    ->icon('fas-calendar-check')
+                    ->color('info')
                     ->requiresConfirmation()
                     ->form([
                         Select::make('type_service')
                             ->options(
-                            AppoitmentTicketEnum::class
+                                AppoitmentTicketEnum::class
                             ),
                         DateTimePicker::make('date'),
                     ])
                     ->slideOver()
                     ->action(function (Ticket $record, array $data) {
-                        $users= $record->user_id;
-                       Appointment::create([
-                            'ticket_id' => $record->id,
+                        $users = $record->user_id;
+                        Appointment::create([
+                            'ticket_id'    => $record->id,
                             'type_service' => $data['type_service'],
-                            'date' => $data['date'],
+                            'date'         => $data['date'],
                         ]);
 
-                   Notification::make()
+                        Notification::make()
                   ->title('Chamado agendado com sucesso')
                   ->body("Seu Chamado de N. {$record->id} Agendado para " . \Carbon\Carbon::parse($data['date'])->format('d/m/Y H:i:s') . " de forma " . AppoitmentTicketEnum::from($data['type_service'])->getLabel())
 
                   ->success()
                   ->actions([
-                    NotificationAction::make('Visualizar')
-                   ->url(route('filament.app.resources.tickets.view', ['record' => $record->id])),
+                      NotificationAction::make('Visualizar')
+                        ->url(route('filament.app.resources.tickets.view', ['record' => $record->id])),
 
-            ])
+                  ])
 
                   ->sendToDatabase(User::find($users));
 
                     }),
 
-                ]),
+                ])
+                ->icon('fas-sliders')
+                ->color('warning'),
 
             ])
             ->bulkActions([

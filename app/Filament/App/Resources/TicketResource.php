@@ -58,7 +58,6 @@ class TicketResource extends Resource
                             ->uploadingMessage('Uploading attachment...')
                             ->maxParallelUploads(1),
                     ])->columns(1),
-
             ]);
     }
 

@@ -12,7 +12,7 @@ use Leandrocfe\FilamentPtbrFormFields\Cep;
 
 class UseraddressesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'useraddresses';
+    protected static string $relationship = 'userAddresses'; // Relacionamento indireto (via User)
 
     public function form(Form $form): Form
     {
